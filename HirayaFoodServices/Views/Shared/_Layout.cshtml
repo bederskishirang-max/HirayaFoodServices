@@ -1,0 +1,152 @@
+﻿@{
+    var path = (Context.Request.Path.Value ?? "/").ToLower();
+    string ActiveIf(params string[] prefixes)
+    {
+        foreach (var p in prefixes)
+        {
+            if (p == "/" && path == "/") return "active";
+            if (p != "/" && path.StartsWith(p)) return "active";
+        }
+        return "";
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hiraya Food Services</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+
+    <style>
+        /* Header Layout */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Navigation (Desktop) */
+        .primary-nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* Hamburger Button */
+        .menu-toggle {
+            display: none;
+            font-size: 28px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #E4E5DB;
+        }
+
+        /* Mobile Styles */
+        @@media (max-width: 768px) {
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .primary-nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                right: 0;
+                width: 100%;
+                background: #2A4436;
+                padding: 15px;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+
+            .primary-nav.active {
+                display: flex;
+            }
+
+            .nav-link,
+            .nav-link-button {
+                padding: 12px 0;
+                border-bottom: 1px solid #eee;
+                width: 100%;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-row">
+            <a class="brand" asp-controller="Home" asp-action="Index">
+                <img src="~/img/hiraya-logo.png" alt="Hiraya Food Services logo" width="40" height="40" />
+                <div class="brand-text">
+                    <div class="brand-name">HIRAYA</div>
+                    <div class="brand-sub">Food Services</div>
+                </div>
+            </a>
+            <button class="menu-toggle" id="menuToggle">
+                ☰
+            </button>
+            <nav class="primary-nav" id="navMenu">
+                <a class="@ActiveIf("/")" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="@ActiveIf("/menu")" asp-controller="Menu" asp-action="Index">Menu</a>
+                <a class="@ActiveIf("/packages")" asp-controller="Packages" asp-action="Index">Packages</a>
+                <a class="@ActiveIf("/admin")" asp-controller="Account" asp-action="Login">Admin</a>
+                <a class="@ActiveIf("/contact")" asp-controller="Contact" asp-action="Index">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <div class="brand-name">HIRAYA</div>
+                <p class="italic small">Food Services — Home Cooking, Crafted with Love.</p>
+            </div>
+            <div class="small">
+                <div class="gold-label">Contact</div>
+                <p>Mobile: +63 9xx xxx xxxx</p>
+                <p>Email: orders@hirayafoods.ph</p>
+            </div>
+            <div class="small">
+                <div class="gold-label">Order Notice</div>
+                <p>Place orders at least 2 days in advance for trays and packages.</p>
+            </div>
+        </div>
+        <div class="footer-copy">© @DateTime.Now.Year Hiraya Food Services</div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const toggle = document.getElementById("menuToggle");
+        const nav = document.getElementById("navMenu");
+
+        toggle.addEventListener("click", function () {
+            nav.classList.toggle("active");
+        });
+
+        // Auto close when clicking a link (better UX)
+        document.querySelectorAll("#navMenu a").forEach(link => {
+            link.addEventListener("click", () => {
+                nav.classList.remove("active");
+            });
+        });
+    });
+</script>

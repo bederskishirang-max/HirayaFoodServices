@@ -1,0 +1,37 @@
+﻿@model List<HirayaFoodServices.Controllers.MenuController.PriceList>
+@{
+    ViewData["Title"] = "Menu";
+}
+
+<div class="container section">
+    <header class="section-head">
+        <span class="kicker">MENU</span>
+        <h1 class="display-2">Food Tray Price List</h1>
+        <p class="muted">Prices in PHP. Order at least 2 days in advance.</p>
+    </header>
+
+    @foreach (var list in Model)
+    {
+        <section class="price-list">
+            <div class="price-list-grid">
+                <div class="price-list-body">
+                    <div class="badge-gold">@list.Title</div>
+                    <ul class="price-rows">
+                        @foreach (var item in list.Items)
+                        {
+                            <li>
+                                <span class="row-name">@item.Name</span>
+                                <span class="row-dots"></span>
+                                <span class="row-price">@item.Price.ToString("N2")</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                @if (!string.IsNullOrEmpty(list.Image))
+                {
+                    <div class="price-list-img"><img src="@Url.Content(list.Image)" alt="@list.Title" loading="lazy" /></div>
+                }
+            </div>
+        </section>
+    }
+</div>

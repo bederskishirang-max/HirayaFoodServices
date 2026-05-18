@@ -1,0 +1,123 @@
+﻿@model HirayaFoodServices.Models.AdminIndexViewModel
+@{
+    ViewData["Title"] = "Admin";
+    var isEdit = Model.EditingId.HasValue;
+}
+
+<div class="container section">
+    <div class="admin-head">
+        <div>
+            <span class="kicker">ADMIN</span>
+            <h1 class="display-2">FoodSource Manager</h1>
+            <p class="muted">Create, read, update, delete menu items — with image upload.</p>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        <div class="alert">@Model.StatusMessage</div>
+    }
+
+    <div class="admin-grid">
+        <form method="post"
+              asp-controller="Admin"
+              asp-action="@(isEdit ? "Update" : "Create")"
+              enctype="multipart/form-data"
+              class="card-light pad form-card">
+            @Html.AntiForgeryToken()
+            <h2 class="card-title">@(isEdit ? "Edit Item" : "New Item")</h2>
+
+            @if (isEdit)
+            {
+                <input type="hidden" asp-for="Input.Id" />
+            }
+
+            <label class="field">
+                <span>NAME</span>
+                <input asp-for="Input.Name" required />
+            </label>
+            <label class="field">
+                <span>CATEGORY</span>
+                <input asp-for="Input.Category" placeholder="e.g. Pork, Chicken, Dessert" required />
+            </label>
+            <label class="field">
+                <span>DESCRIPTION</span>
+                <textarea asp-for="Input.Description" rows="3"></textarea>
+            </label>
+            <label class="field">
+                <span>PRICE (PHP)</span>
+                <input asp-for="Input.Price" type="number" step="0.01" required />
+            </label>
+            <label class="field">
+                <span>IMAGE</span>
+                <input asp-for="Input.Image" type="file" accept="image/*" class="file-input" />
+            </label>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">@(isEdit ? "Update" : "Create")</button>
+                @if (isEdit)
+                {
+                    <a asp-controller="Admin" asp-action="Index" class="btn btn-outline">Cancel</a>
+                }
+            </div>
+        </form>
+
+        <div class="card-light list-card">
+            <div class="list-head">
+                <h2 class="card-title">Items (@Model.Items.Count)</h2>
+                <a asp-controller="Admin" asp-action="Index" class="link">Refresh</a>
+            </div>
+            @if (Model.Items.Count == 0)
+            {
+                <div class="empty">No items yet.</div>
+            }
+            else
+            {
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th class="right">Price</th>
+                                <th class="right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var f in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(f.ImageUrl))
+                                        {
+                                            <img src="@f.ImageUrl" alt="@f.Name" class="thumb" />
+                                        }
+                                        else
+                                        {
+                                            <div class="thumb thumb-empty"></div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="bold">@f.Name</div>
+                                        <div class="muted small line-clamp">@f.Description</div>
+                                    </td>
+                                    <td><span class="chip">@f.Category</span></td>
+                                    <td class="right tabular bold green">₱@f.Price.ToString("N0")</td>
+                                    <td class="right">
+                                        <a asp-controller="Admin" asp-action="Index" asp-route-edit="@f.Id" class="link">Edit</a>
+                                        <form method="post" asp-controller="Admin" asp-action="Delete" asp-route-id="@f.Id"
+                                              class="inline-form" onsubmit="return confirm('Delete this item?');">
+                                            @Html.AntiForgeryToken()
+                                            <button class="link link-danger" type="submit">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

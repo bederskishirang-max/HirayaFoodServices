@@ -1,0 +1,69 @@
+﻿@model HirayaFoodServices.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = null;
+}
+<link href="~/css/site.css" rel="stylesheet" />
+<section class="auth-section">
+    <div class="auth-bg"></div>
+    <div class="container auth-wrap">
+        <div class="auth-card">
+            <div class="auth-brand">
+                <img src="~/img/hiraya-logo.png" alt="Hiraya Food Services" width="56" height="56" />
+                <div>
+                    <div class="brand-name auth-brand-name">HIRAYA</div>
+                    <div class="auth-brand-sub italic">Food Services</div>
+                </div>
+            </div>
+
+            <span class="kicker auth-kicker">Welcome Back</span>
+            <h1 class="display-2 auth-title">Sign in to your <span class="gold">account</span></h1>
+            <p class="muted small auth-sub">Manage your menu, packages, and food sources.</p>
+
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState[""]?.Errors.Count > 0)
+            {
+                <div class="alert alert-error" role="alert">
+                    @Html.ValidationSummary(true)
+                </div>
+            }
+
+            <form asp-controller="Account" asp-action="Login" method="post" class="auth-form" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="ReturnUrl" />
+
+                <label class="field">
+                    <span>EMAIL</span>
+                    <input asp-for="Email" type="email" autocomplete="email" placeholder="you@hirayafoods.ph" />
+                    <span class="field-error" asp-validation-for="Email"></span>
+                </label>
+
+                <label class="field">
+                    <span>PASSWORD</span>
+                    <input asp-for="Password" type="password" autocomplete="current-password" placeholder="••••••••" />
+                    <span class="field-error" asp-validation-for="Password"></span>
+                </label>
+
+                <div class="auth-row">
+                    <label class="checkbox">
+                        <input asp-for="RememberMe" type="checkbox" />
+                        <span>Remember me</span>
+                    </label>
+                    <a class="link" href="#">Forgot password?</a>
+                </div>
+
+                <div class="form-actions auth-actions">
+                    <button type="submit" class="btn btn-gold auth-submit">Sign In</button>
+                </div>
+
+                <p class="auth-foot small muted">
+                    Don't have an account?
+                    <a class="link bold" href="#">Request access</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

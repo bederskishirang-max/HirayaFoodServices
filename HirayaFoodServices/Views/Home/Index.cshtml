@@ -1,0 +1,39 @@
+﻿@model List<HirayaFoodServices.Controllers.HomeController.Specialty>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="hero">
+    <div class="hero-bg">
+        <img src="~/img/hero-platter.jpg" alt="Hiraya party platter with lechon belly, fried chicken, lumpia and pancit" />
+        <div class="hero-overlay"></div>
+    </div>
+    <div class="container hero-content">
+        <span class="kicker">HIRAYA · FOOD SERVICES</span>
+        <h1 class="display-1">Filipino feasts, <em class="gold">crafted at home.</em></h1>
+        <p class="lead">Lechon belly, food trays, and party packages catered with love for birthdays, fiestas, and every celebration.</p>
+        <div class="cta-row">
+            <a asp-controller="Menu" asp-action="Index" class="btn btn-gold">View Menu</a>
+            <a asp-controller="Packages" asp-action="Index" class="btn btn-ghost">Lechon Packages</a>
+        </div>
+    </div>
+</section>
+
+<section class="container section">
+    <div class="section-head">
+        <span class="kicker">SPECIALTIES</span>
+        <h2 class="display-2">Made for celebrations</h2>
+    </div>
+    <div class="grid grid-3">
+        @foreach (var c in Model)
+        {
+            <article class="card-img">
+                <div class="card-img-wrap"><img src="@Url.Content(c.Img)" alt="@c.Title" loading="lazy" /></div>
+                <div class="card-body">
+                    <h3 class="card-title">@c.Title</h3>
+                    <p class="muted">@c.Desc</p>
+                </div>
+            </article>
+        }
+    </div>
+</section>
