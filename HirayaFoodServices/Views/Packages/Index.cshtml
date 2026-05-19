@@ -1,0 +1,82 @@
+﻿@model HirayaFoodServices.Controllers.PackagesViewModel
+@{
+    ViewData["Title"] = "Packages";
+}
+
+<div class="container section">
+    <header class="section-head">
+        <span class="kicker">PACKAGES</span>
+        <h1 class="display-2">Lechon Belly & Food Packages</h1>
+    </header>
+
+    <section>
+        <h2 class="section-title">Lechon Belly Package</h2>
+        <div class="grid grid-3">
+            @foreach (var p in Model.LechonBelly)
+            {
+                <article class="card-dark">
+                    <div class="badge-gold">@p.Tier</div>
+                    <div class="price-big">PHP @p.Price.ToString("N0")</div>
+                    <ul class="bullets">
+                        <li>• LECHON BELLY (@p.Kg)</li>
+                        <li>• 6 Side Dishes (Fix)</li>
+                        <li>• @p.Pax</li>
+                    </ul>
+                </article>
+            }
+        </div>
+        <img src="~/img/menu-lechon-belly.jpg" alt="Lechon belly platter" loading="lazy" class="banner-img" />
+    </section>
+
+    @*<section style="margin-top:3.5rem">
+        <h2 class="section-title">Food Packages</h2>
+        <div class="grid grid-2">
+            @foreach (var p in Model.FoodPackages)
+            {
+                <article class="card-light">
+                    <div class="card-light-head">
+                        <div class="badge-gold">@p.Name</div>
+                        <div class="price-big-dark">PHP @p.Price.ToString("N0")</div>
+                    </div>
+                    <ul class="bullets-dark">
+                        @foreach (var i in p.Includes)
+                        {
+                            <li>• @i</li>
+                        }
+                    </ul>
+                </article>
+            }
+        </div>
+        <img src="~/img/menu-food-package.jpg" alt="Food package overview" loading="lazy" class="banner-img" />
+    </section>*@
+
+    <section style="margin-top:3.5rem">
+        <h2 class="section-title">Food Packages</h2>
+
+        <div class="grid grid-2">
+            @foreach (var p in Model.FoodPackages)
+            {
+                <article class="card-light">
+                    <div class="card-light-head">
+                        <div class="badge-gold">@p.Name</div>
+                        <div class="price-big-dark">
+                            PHP @p.Price.ToString("N0")
+                        </div>
+                    </div>
+
+                    <ul class="bullets-dark">
+                        @foreach (var i in p.Includes)
+                        {
+                        <li>• @i</li>
+                        }
+                    </ul>
+                </article>
+            }
+        </div>
+
+        <img src="~/img/menu-food-package.jpg"
+             alt="Food package overview"
+             loading="lazy"
+             class="banner-img" />
+    </section>
+</div>
