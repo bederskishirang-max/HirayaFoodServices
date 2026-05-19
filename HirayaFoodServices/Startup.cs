@@ -28,19 +28,15 @@ namespace HirayaFoodServices
             services.AddControllersWithViews();
 
 
-            services.AddDbContext<AppDbContext>(options =>
-                        options.UseNpgsql(
-                            Configuration.GetConnectionString("DefaultConnection")
-                        )
-                    );
+            services.AddControllersWithViews();
 
             var connectionString =
-            Environment.GetEnvironmentVariable("DATABASE_URL")
-            ?? Configuration.GetConnectionString("DefaultConnection");
+                Environment.GetEnvironmentVariable("DATABASE_URL")
+                ?? Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(connectionString)
-);
+                options.UseNpgsql(connectionString)
+            );
 
         }
 
